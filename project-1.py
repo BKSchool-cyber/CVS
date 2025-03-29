@@ -1,20 +1,34 @@
 import csv
 
-def read_csv_no_duplicates(file_path):
-    seen_rows = set()
-    unique_rows = []
+address_a = []
+packets = []
 
-    with open(file_path, 'r') as file:
-        csv_reader = csv.reader(file)
-        for row in csv_reader:
-            row_tuple = tuple(row)
-            if row_tuple not in seen_rows:
-                seen_rows.add(row_tuple)
-                unique_rows.append(row)
-    return unique_rows
+final_ip = []
+final_packets = []
 
-# Example usage:
-file_path = 'PCAP Data.csv'
-data = read_csv_no_duplicates(file_path)
-for row in data:
-    print(row)
+with open('PCAP Data.csv', newline='') as file:
+  reader = csv.reader(file, delimiter=',')
+  for row in reader:
+    data= (row[0].split(","))
+    address_a.append(data[0])
+    address_a.append(data[1])
+    packets.append(data[2])
+    packets.append(data[5])
+    packets.append(data[7])
+  ip_list = sorted(set(address_a))
+  packets_list = sorted(set(packets))
+  packets_list.pop(-1)
+  packets_list.pop(-1)
+  packets_list.pop(-1)
+  ip_list.pop(-1)
+  ip_list.pop(-1)
+  for item in ip_list:
+    format = item.replace('"','')
+    final_ip.append(format)
+  for item in packets_list:
+    format = item.replace('"','')
+    final_packets.append(format)
+
+f = open("pcap_results.txt", "w")
+f.write(f"Unique IP Addresses: {final_ip} \n\nUnique Packets: {final_packets}")
+f.close()
